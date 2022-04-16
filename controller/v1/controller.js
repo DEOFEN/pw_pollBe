@@ -18,23 +18,8 @@ async function getAllPolls(req,res){
 
 async function addNewPoll(req,res){
     try{
-        let dummyData = {
-            question: "What is Your Favourite Color",
-            options: [
-                {
-                    optionId     : 1, 
-                    option      : "red", 
-                    votes      : 0
-                },
-                {
-                    optionId     : 2, 
-                    option      : "blue", 
-                    votes      : 0
-                }
-            ] 
-          }
           
-        let pollResponse = await service.addNewPoll(dummyData);
+        let pollResponse = await service.addNewPoll(req.body);
         console.log("pollResponse", pollResponse)
          let response =  {
              statusCode: 200,
@@ -54,28 +39,23 @@ async function addNewPoll(req,res){
 
  async function givePoll(req,res){
     try{
-        req.body = {
-            questionId: "asdfghjkl",
-            OptionId
+        console.log("req.body", req.body)
+        if(!req.body.optionIds){
+            let errorData =  {statusCode: 400,msg: "ERROR",error: {err: "enter option"}};
+
+           res.type("json");
+           return res.send(JSON.stringify(errorData));
         }
-        let dummyData = {
-            question: "What is Your Favourite Color",
-            options: [
-                {
-                    optionId     : 1, 
-                    option      : "red", 
-                    votes      : 0
-                },
-                {
-                    optionId     : 2, 
-                    option      : "blue", 
-                    votes      : 0
-                }
-            ] 
-          }
-          
-        let pollResponse = await service.addNewPoll(dummyData);
-        console.log("pollResponse", pollResponse)
+       
+        for(let i=0;i<req.body.optionIds.length;i++){
+            let updateObj = {
+                pollId: req.body.questionId,
+                optionId: req.body.optionIds[i]
+            }
+            let pollResponse = await service.givePoll(updateObj);
+            console.log("pollResponse", pollResponse)
+        }
+
          let response =  {
              statusCode: 200,
              msg: "SUCCESS",

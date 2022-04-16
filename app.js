@@ -2,9 +2,10 @@ const express = require("express");
 const app = express();
 const v1Routes = require("./controller/v1/index")
 const cors = require("cors")
+app.use(cors())
 
 app.use(express.urlencoded({ extended: true }));
-app.use(cors())
+app.use(express.json())
 
 app.use('/v1', v1Routes)
 

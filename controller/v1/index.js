@@ -11,7 +11,7 @@ router.post('/addNewPoll',
    controller.addNewPoll
 )
 
-router.put('/givePoll',
+router.post('/givePoll',
    controller.givePoll
 )
 

@@ -1,10 +1,11 @@
 const pollModel = require('../../models/polls')
 
 
-const allPolls = pollModel.find({});
+
 
 function getAllPolls(){
-    console.log("all",allPolls)
+    const allPolls = pollModel.find({});
+    console.log("allPolls",allPolls.data)
     return allPolls;
 }
 
@@ -16,10 +17,25 @@ function addNewPoll(data){
         console.log("doc", doc)
          return doc;
       });
+      return true;
+}
+
+function givePoll(data){
+    console.log("control", data)
+
+    const book = pollModel.findOne({ "_id": data.pollId, 
+    "options._id" : data.optionId });
+
+    console.log("book", book)
+    const item = pollModel.findOneAndUpdate({ "_id": data.pollId, 
+    "options._id" : data.optionId },{$inc: { "options.$.votes": 1 }}, {new: true});
+    console.log(item);
+          return item
 
 }
 
 module.exports = {
     getAllPolls,
-    addNewPoll
+    addNewPoll,
+    givePoll
 }
